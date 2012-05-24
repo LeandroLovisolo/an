@@ -1,0 +1,30 @@
+This is a completely from-scratch rewrite of the "an" anagram
+generator.
+
+It is a clean room reimplementation inspired by the algorithm by
+Richard Jones and Julian Assange.  It fully supports accented words
+(to the extent that libicu allows).
+
+Algorithm:
+
+* Given a phrase, convert it to a standard form (fold case and remove
+  any accents and marks), generate the set of letters that are unique
+  to that phrase (an alphabet), and generate a bit pattern describing
+  the letter frequencies.
+
+* Read the dictionary into a word list, converting the words into the
+  standard form, and discarding any words which are longer than the
+  phrase or don't contain letters which can be made from the
+  phrase. Produce letter frequency bitpatterns for each word.
+
+* Maintain a current bit pattern, which starts as the phrase's bit pattern.
+
+* Step through the word list, finding words that have a bit pattern
+  which is a subset of the current bit pattern. For each word that
+  matches, push the current word onto a stack, then recurse into the
+  "step through the word list" starting at the current we are looking
+  at, and with a new current bit pattern that has the letter
+  frequencies of the current word subtracted. If we've been able to
+  exactly match the phrase length, print out the word stack. Pop the
+  current word off the stack, and step on to the next word until we
+  run out of words.

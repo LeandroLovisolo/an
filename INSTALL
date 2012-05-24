@@ -1,0 +1,15 @@
+Edit the Makefile to change MANDIR, BINDIR, CC, CFLAGS and CPPFLAGS to 
+match the requirements of your system.
+
+You will need the ICU libraries, which provide Unicode support.
+
+The code should be ANSI-clean, but it does require strdup() and 
+getopt_long() (a GNU extension).
+
+To build:
+
+  make
+
+To build and install:
+
+  make install

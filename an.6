@@ -1,0 +1,78 @@
+.TH AN 6
+.SH NAME
+an \- Anagram generator 
+.SH SYNOPSIS
+.B an
+[-w] [-c string] [-d dictionary] [-l number_words] [-m word_length]
+[-u string] [-n number_anagrams] [-h] [-v]
+[--words] [--contain string] [--dict dictionary]
+[--length number_words] [--minimum word_length]  [--used string] 
+[--number number_anagrams] [--help] [--version] PHRASE
+.SH DESCRIPTION
+.B an
+finds all anagrams which can be made from the letters in \fBPHRASE\fP, 
+using words in the specified dictionary. The default is to use 
+/usr/share/dict/words.
+.SH OPTIONS
+.TP
+.I \-w, --words
+Print words that the letters in \fBPHRASE\fP can make, then exit.
+.TP
+.I \-c, --contain string
+Only print anagrams which contain \fIstring\fP.
+
+.TP
+.I \-d, --dict dictionary
+Use \fIdictionary\fP file to find words which the letters in \fBPHRASE\fP
+can make.
+
+.TP
+.I \-m, --minimum word_length
+Only include word which are at least \fIword_length\fP long.
+
+
+.TP
+.I \-u, --used string
+Considers that letters in \fIstring\fP have already used when analyzing
+letters in \fBPHRASE\fP.  Like \fI--contain\fP but doesn't print out
+\fIstring\fP.
+
+.TP
+.I \-l, --length number_words
+Finds anagrams which have a maximum of \fInumber_words\fP words in them.
+This is very useful when number of anagrams which are output is large.
+
+.TP
+.I \-n, --number number_anagrams
+Stops after finding \fInumber_anagrams\fP anagrams.
+
+.TP
+.I \-h, --help
+Print a usage message on standard output, then exit.
+
+.TP
+.I \-v, --version
+Print version information on standard output, then exit.
+.SH EXAMPLE
+.PP
+an -c imp 'Paul Martin'
+.PP
+Finds anagrams for \fIPaul Martin\fP which contain the word \fIimp\fP.
+
+.SH AUTHOR
+.PP
+\fIPaul Martin\fP <pm@debian.org>
+
+.SH THANKS
+.PP
+\fIRichard Jones\fP (richard@deep-thought.org)
+  - Coding and algorithm design of original version.
+.PP
+\fIJulian Assange\fP (proff@suburbia.net)
+  - Algorithm design of original version.
+.PP
+Please note that the email addresses for Richard and Julian are from
+over ten years ago and probably no longer work.
+.SH COPYRIGHT
+.PP
+Copyright (c) Paul Martin 2012. All rights reserved.
