@@ -25,6 +25,7 @@ INSTALL:=install
 CFLAGS += $(shell icu-config --cflags)
 CPPFLAGS += $(shell icu-config --cppflags) -D_BSD_SOURCE=1 -D_GNU_SOURCE=1
 LDFLAGS += $(shell icu-config --ldflags)
+LIBS += $(shell icu-config --ldflags-libsonly)
 
 BIN=an
 MAN=an.6
@@ -37,6 +38,7 @@ all:	$(BIN)
 $(OBJS): $(HEADERS)
 
 $(BIN):	$(OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LIBS) -o $@
 
 $(MAN):
 
