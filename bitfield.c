@@ -163,7 +163,7 @@ make_alphabet(const UChar *source)
     int sourcelen = u_strlen(source);
     int x, y;
 
-    dest = safe_calloc(sourcelen, sizeof(UChar));
+    dest = safe_calloc(sourcelen + 1, sizeof(UChar));
 
     u_strcpy(dest, source);
 
