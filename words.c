@@ -1,5 +1,5 @@
 /*  an - Anagram generator
-    Copyright (C) 2012  Paul Martin <pm@debian.org>
+    Copyright (C) 2012,2014  Paul Martin <pm@debian.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -81,7 +81,9 @@ add_word(struct wordlist **words, UChar *alphabet, struct bitfield *masterbits,
     }
 
     newword->length = u_strlen(internal);
-    if ((newword->length > maxlen) || (newword->length < minlen)) {
+    if ((newword->length == 0) ||
+        (newword->length > maxlen) ||
+        (newword->length < minlen)) {
         free(internal);
         free(newword);
         return;
