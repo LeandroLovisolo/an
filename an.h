@@ -1,5 +1,5 @@
 /*  an - Anagram generator
-    Copyright (C) 2012  Paul Martin <pm@debian.org>
+    Copyright (C) 2012,2014  Paul Martin <pm@debian.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 #ifndef AN_H
 #define AN_H
 
-#define VERSION "an 1.0~alpha - 16 May 2012"
+#define VERSION "an 1.2 - 2 July 2014"
 
 #define DEFAULT_DICT "/usr/share/dict/words"
 
