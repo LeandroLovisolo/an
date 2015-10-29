@@ -70,6 +70,85 @@ find_anagrams(struct wordlist *words, struct wordlist *stack,
     }
 }
 
+static int
+is_there_an_anagram(struct wordlist *words, struct wordlist *stack,
+                    struct bitfield *bits, int maxwords, int length, int *maxtotal)
+{
+    struct bitfield *remaining_bits = NULL;
+    struct wordlist *w = words;
+
+    if (maxwords <= 0)
+        return 0;
+
+    if (*maxtotal <= 0)
+        return 0;
+
+
+    while (w != NULL) {
+        if (length >= w->word->length) {
+            if (bf_contains(bits, w->word->bits)) {
+                int newlength = length - w->word->length;
+
+                //printf(" -- considering %s\n", w->word->utf8_form);
+                stack = push_wordstack(stack, w->word);
+                if (newlength > 0) {
+            		remaining_bits = bf_subtract(bits, w->word->bits);
+		    	int r = is_there_an_anagram(w, stack, remaining_bits, maxwords - 1, newlength, maxtotal);
+        		free_bitfield(remaining_bits);
+			if (r) {
+                		stack = pop_wordstack(stack);
+				return 1;
+			}
+                } else {
+                	stack = pop_wordstack(stack);
+			return 1;
+                }
+                stack = pop_wordstack(stack);
+            }
+        }
+        w = w->next;
+    }
+    return 0;
+}
+
+static void
+find_anagram_words(struct wordlist *words, struct wordlist *stack,
+                   struct bitfield *bits, int maxwords, int length, int *maxtotal)
+{
+    struct bitfield *remaining_bits = NULL;
+    struct wordlist *w = words;
+
+    if (maxwords <= 0)
+        return;
+
+    if (*maxtotal <= 0)
+        return;
+
+    /* printf("word depth = %d, length = %d\n", INT_MAX-maxwords, length); */
+
+    while (w != NULL) {
+        if (length >= w->word->length) {
+            if (bf_contains(bits, w->word->bits)) {
+                int newlength = length - w->word->length;
+                //printf(" considering %s\n", w->word->utf8_form);
+                stack = push_wordstack(stack, w->word);
+		if (newlength > 0) {
+            		remaining_bits = bf_subtract(bits, w->word->bits);
+			if (is_there_an_anagram(w, stack, remaining_bits, maxwords - 1, newlength, maxtotal)) {
+                        	print_wordstack(stack);
+                        	fputs("\n", stdout);
+			}
+                	free_bitfield(remaining_bits);
+		} else {
+                       	print_wordstack(stack);
+                       	fputs("\n", stdout);
+		}
+                stack = pop_wordstack(stack);
+            }
+        }
+        w = w->next;
+    }
+}
 
 static void
 print_help(const char *progname)
@@ -108,7 +187,7 @@ main(int argc, char **argv)
     int maxlen, minlen = 0;
     int maxwords = INT_MAX, maxtotal = INT_MAX;
     int opt, longindex;
-    bool just_test = false, include_contains = false, just_words = false;
+    bool just_test = false, include_contains = false, just_words = false, just_anagram_words = false;
     const struct option long_opts[] = {
         {"contain", required_argument, 0, 'c'},
         {"dict", required_argument, 0, 'd'},
@@ -128,7 +207,7 @@ main(int argc, char **argv)
 
     /* parse arguments */
 
-    while ((opt = getopt_long (argc, argv, "c:d:hl:m:n:t:u:vw",
+    while ((opt = getopt_long (argc, argv, "c:d:hl:m:n:t:u:vwW",
                                long_opts, &longindex)) != -1) {
         switch (opt) {
         case 'c':
@@ -165,6 +244,9 @@ main(int argc, char **argv)
             exit(0);
         case 'w':
             just_words = true;
+            break;
+        case 'W':
+            just_anagram_words = true;
             break;
         default:
             fprintf(stderr, "Unexpected option %c\n", optopt);
@@ -236,8 +318,11 @@ main(int argc, char **argv)
             /* printf(" %3d %s\n", w->word->length, w->word->utf8_form); */
             puts(w->word->utf8_form);
         }
-    } else
+    } else if (just_anagram_words) {
+        find_anagram_words(words, stack, phrase.bits, maxwords, maxlen, &maxtotal);
+    } else {
         find_anagrams(words, stack, phrase.bits, maxwords, maxlen, &maxtotal);
+    }
 
     return 0;
 }
